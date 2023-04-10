@@ -35,9 +35,10 @@ def get_login():
 
     soup = BeautifulSoup(html, 'html.parser')
 
-    elementos = soup.find_all('div', {'class': 'ng-binding'})
+    elementos = soup.find_all('p', {'class': 'ng-binding'})
     for elemento in elementos:
         print(elemento.text)
+        print('======================================')
  
 if __name__ == "__main__":
     get_login()
