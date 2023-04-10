@@ -1,3 +1,5 @@
+import time
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import os
@@ -21,11 +23,21 @@ def get_login():
     password_input = driver.find_element(By.ID, "Password")
     username_input.send_keys(user_login)
     password_input.send_keys(password_login)
-
+    
     # Find the login button and click it
     login_button = driver.find_element(
         By.XPATH, "//button[contains(text(),'Iniciar sesión')]")
-    
     login_button.click()
     
-get_login()
+    time.sleep(5)
+    
+    html = driver.page_source
+
+    soup = BeautifulSoup(html, 'html.parser')
+
+    elementos = soup.find_all('div', {'class': 'ng-binding'})
+    for elemento in elementos:
+        print(elemento.text)
+ 
+if __name__ == "__main__":
+    get_login()
