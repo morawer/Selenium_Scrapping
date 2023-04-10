@@ -1,7 +1,9 @@
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 import os
 from dotenv import load_dotenv
 
@@ -28,17 +30,27 @@ def get_login():
     login_button = driver.find_element(
         By.XPATH, "//button[contains(text(),'Iniciar sesión')]")
     login_button.click()
-    
-    time.sleep(5)
-    
+        
     html = driver.page_source
 
     soup = BeautifulSoup(html, 'html.parser')
 
-    elementos = soup.find_all('p', {'class': 'ng-binding'})
-    for elemento in elementos:
-        print(elemento.text)
-        print('======================================')
+    span_elements = soup.find_all('span', id='lblLöpnummer')
+
+
+# Iterar sobre los elementos <span> encontrados
+    for span in span_elements:
+    # Encontrar el elemento <a> dentro del <span>
+        enlace = span.find('a')
+    # Obtener el texto del elemento <a>
+        texto = enlace.get_text()
+    # Obtener el valor del atributo "href" del elemento <a>
+        enlace_href = enlace['href']
+    # Imprimir el resultado
+        print("Texto del elemento: ", texto)
+        print("Enlace del elemento: ", enlace_href)
+
+
  
 if __name__ == "__main__":
     get_login()
