@@ -1,4 +1,5 @@
 import time
+import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -31,26 +32,36 @@ def get_login():
         By.XPATH, "//button[contains(text(),'Iniciar sesión')]")
     login_button.click()
         
-    html = driver.page_source
+    html = driver.page_source  
 
+    return html
+
+def get_info(html):
     soup = BeautifulSoup(html, 'html.parser')
+    spans = soup.find_all('tr')
+    for span in spans:
+        a = span.find('span', id='lblLöpnummer')
+        span_tag = soup.find('span', {'id': 'lblLöpnummer'})
 
-    span_elements = soup.find_all('span', id='lblLöpnummer')
 
+        # Encontrar la etiqueta "a" dentro de la etiqueta "span"
+        a_tag = span_tag.find('a')
 
-# Iterar sobre los elementos <span> encontrados
-    for span in span_elements:
-    # Encontrar el elemento <a> dentro del <span>
-        enlace = span.find('a')
-    # Obtener el texto del elemento <a>
-        texto = enlace.get_text()
-    # Obtener el valor del atributo "href" del elemento <a>
-        enlace_href = enlace['href']
-    # Imprimir el resultado
-        print("Texto del elemento: ", texto)
-        print("Enlace del elemento: ", enlace_href)
+        # Obtener el valor del atributo "href"
+        href = a_tag['href']
+
+        # Obtener el texto contenido dentro de la etiqueta "a"
+        texto = a_tag.get_text()
+
+        # Imprimir los resultados
+        print('href:', href)
+        print('Texto:', texto)
+    
+ 
+ 
+
 
 
  
 if __name__ == "__main__":
-    get_login()
+    get_info(get_login())
